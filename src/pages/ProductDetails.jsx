@@ -5,6 +5,7 @@ import { FiShoppingCart, FiHeart, FiArrowLeft, FiMinus, FiPlus } from 'react-ico
 import useProductStore from '../store/useProductStore';
 import useCartStore from '../store/useCartStore';
 import toast from 'react-hot-toast';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const ProductDetails = () => {
   const { id } = useParams();
