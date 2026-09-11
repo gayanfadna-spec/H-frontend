@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import useCartStore from '../store/useCartStore';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const Checkout = () => {
   const { cartItems, getCartTotals, clearCartItems } = useCartStore();
@@ -17,19 +18,46 @@ const Checkout = () => {
   });
   const [paymentMethod, setPaymentMethod] = useState('PayPal');
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     if (!shippingAddress.address || !shippingAddress.city || !shippingAddress.postalCode || !shippingAddress.country) {
       toast.error('Please fill in all shipping fields');
       return;
     }
     
-    // Here we would typically dispatch an action to the backend API to create the order
-    // Since Auth is not fully wired up in the UI yet, we mock a successful order placement
-    
-    toast.success('Order placed successfully!');
-    clearCartItems();
-    navigate('/');
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      if (!userInfo) {
+        toast.error('Please login to place an order');
+        navigate('/login');
+        return;
+      }
+      
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const orderData = {
+        orderItems: cartItems,
+        shippingAddress,
+        paymentMethod,
+        itemsPrice: totals.itemsPrice,
+        shippingPrice: totals.shippingPrice,
+        taxPrice: totals.taxPrice,
+        totalPrice: totals.totalPrice,
+      };
+
+      const { data } = await axios.post('/api/orders', orderData, config);
+      
+      toast.success('Order placed successfully!');
+      clearCartItems();
+      navigate(`/order/${data._id}`);
+    } catch (err) {
+      toast.error(err.response?.data?.message || err.message);
+    }
   };
 
   if (cartItems.length === 0) {
@@ -142,10 +170,10 @@ const Checkout = () => {
                   <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-premium-dark">{item.name}</p>
-                    <p className="text-sm text-gray-500">{item.qty} x ${item.price.toFixed(2)}</p>
+                    <p className="text-sm text-gray-500">{item.qty} x LKR {item.price.toFixed(2)}</p>
                   </div>
                   <div className="text-sm font-bold text-premium-dark">
-                    ${(item.qty * item.price).toFixed(2)}
+                    LKR {(item.qty * item.price).toFixed(2)}
                   </div>
                 </div>
               ))}
@@ -154,21 +182,21 @@ const Checkout = () => {
             <div className="space-y-4 mb-6 text-gray-600 border-t pt-4">
               <div className="flex justify-between">
                 <span>Items</span>
-                <span>${totals.itemsPrice}</span>
+                <span>LKR {totals.itemsPrice}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span>{Number(totals.shippingPrice) === 0 ? 'Free' : `$${totals.shippingPrice}`}</span>
+                <span>{Number(totals.shippingPrice) === 0 ? 'Free' : `LKR ${totals.shippingPrice}`}</span>
               </div>
               <div className="flex justify-between">
                 <span>Tax</span>
-                <span>${totals.taxPrice}</span>
+                <span>LKR {totals.taxPrice}</span>
               </div>
             </div>
             
             <div className="flex justify-between items-center py-4 border-t border-gray-100">
               <span className="text-lg font-bold text-premium-dark uppercase tracking-wider">Total</span>
-              <span className="text-2xl font-bold text-premium-accent">${totals.totalPrice}</span>
+              <span className="text-2xl font-bold text-premium-accent">LKR {totals.totalPrice}</span>
             </div>
           </div>
         </div>

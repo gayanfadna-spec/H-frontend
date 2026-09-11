@@ -86,7 +86,7 @@ const ProductList = () => {
                     <tr key={product._id} className="hover:bg-gray-50 transition-colors">
                       <td className="p-4 text-sm text-gray-500">{product._id.substring(0, 8)}...</td>
                       <td className="p-4 font-medium text-premium-dark">{product.name}</td>
-                      <td className="p-4 text-gray-600">${product.price.toFixed(2)}</td>
+                      <td className="p-4 text-gray-600">LKR {product.price.toFixed(2)}</td>
                       <td className="p-4 text-gray-600">{product.category?.name || 'N/A'}</td>
                       <td className="p-4 text-gray-600">{product.brand}</td>
                       <td className="p-4 flex justify-center gap-3">

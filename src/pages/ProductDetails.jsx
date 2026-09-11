@@ -11,6 +11,7 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const [qty, setQty] = useState(1);
   const [activeImage, setActiveImage] = useState('');
+  const [zoomStyle, setZoomStyle] = useState({ transformOrigin: 'center center', transform: 'scale(1)' });
   
   const { product, loading, error, fetchProductDetails } = useProductStore();
   const addToCart = useCartStore((state) => state.addToCart);
@@ -29,6 +30,25 @@ const ProductDetails = () => {
     addToCart(product, qty);
     toast.success(`${product.name} added to cart`);
     navigate('/cart');
+  };
+
+  const handleMouseMove = (e) => {
+    // If the event target is the image, calculate coordinates relative to it
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    setZoomStyle({
+      transformOrigin: `${x}% ${y}%`,
+      transform: 'scale(2.5)' // Zoom level
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setZoomStyle({
+      transformOrigin: 'center center',
+      transform: 'scale(1)'
+    });
   };
 
   if (loading) {
@@ -64,8 +84,17 @@ const ProductDetails = () => {
         <div className="flex flex-col md:flex-row gap-12 lg:gap-20">
           {/* Images Section */}
           <div className="md:w-1/2">
-            <div className="bg-gray-100 rounded-lg overflow-hidden mb-4">
-              <img src={activeImage} alt={product.name} className="w-full h-auto object-cover" />
+            <div 
+              className="bg-gray-100 rounded-lg overflow-hidden mb-4 cursor-crosshair relative"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+            >
+              <img 
+                src={activeImage} 
+                alt={product.name} 
+                className="w-full h-auto object-cover transition-transform duration-200 ease-out" 
+                style={zoomStyle}
+              />
             </div>
             {product.images && product.images.length > 1 && (
               <div className="flex gap-4 overflow-x-auto pb-2">
@@ -88,9 +117,9 @@ const ProductDetails = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-premium-dark mb-4">{product.name}</h1>
             
             <div className="flex items-center gap-4 mb-8">
-              <span className="text-2xl font-bold text-premium-accent">${product.price.toFixed(2)}</span>
+              <span className="text-2xl font-bold text-premium-accent">LKR {product.price.toFixed(2)}</span>
               {product.originalPrice && product.originalPrice > product.price && (
-                <span className="text-lg text-gray-400 line-through">${product.originalPrice.toFixed(2)}</span>
+                <span className="text-lg text-gray-400 line-through">LKR {product.originalPrice.toFixed(2)}</span>
               )}
             </div>
 
@@ -150,6 +179,87 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+
+        {/* Reviews Section */}
+        <div className="mt-20">
+          <h2 className="text-3xl font-bold mb-8 uppercase tracking-widest text-premium-dark border-b pb-4">Customer Reviews</h2>
+          <div className="flex flex-col lg:flex-row gap-12">
+            
+            {/* Reviews List */}
+            <div className="lg:w-2/3">
+              {product.reviews && product.reviews.length === 0 && (
+                <div className="bg-gray-50 p-8 text-center text-gray-500 rounded-lg">
+                  No reviews yet. Be the first to review this product!
+                </div>
+              )}
+              <div className="space-y-6">
+                {product.reviews && product.reviews.map((review) => (
+                  <div key={review._id} className="bg-gray-50 p-6 rounded-lg">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="font-semibold text-premium-dark text-lg">{review.name}</div>
+                      <div className="flex items-center text-premium-accent">
+                        {[...Array(5)].map((_, i) => (
+                          <span key={i} className={i < review.rating ? 'text-premium-accent' : 'text-gray-300'}>★</span>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-gray-600 mb-2">{review.comment}</p>
+                    <p className="text-xs text-gray-400">{review.createdAt?.substring(0, 10)}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Write a Review Form */}
+            <div className="lg:w-1/3">
+              <div className="bg-white p-6 border border-gray-100 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold mb-6 uppercase tracking-wider text-premium-dark">Write a Review</h3>
+                {localStorage.getItem('userInfo') ? (
+                  <form onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    const reviewData = {
+                      rating: Number(formData.get('rating')),
+                      comment: formData.get('comment'),
+                    };
+                    useProductStore.getState().createReview(product._id, reviewData)
+                      .then(() => {
+                        toast.success('Review submitted successfully');
+                        fetchProductDetails(product._id);
+                        e.target.reset();
+                      })
+                      .catch((err) => toast.error(err.message || 'Error submitting review'));
+                  }}>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">Rating</label>
+                      <select name="rating" className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-premium-accent" required>
+                        <option value="">Select...</option>
+                        <option value="1">1 - Poor</option>
+                        <option value="2">2 - Fair</option>
+                        <option value="3">3 - Good</option>
+                        <option value="4">4 - Very Good</option>
+                        <option value="5">5 - Excellent</option>
+                      </select>
+                    </div>
+                    <div className="mb-6">
+                      <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">Comment</label>
+                      <textarea name="comment" rows="4" className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-premium-accent" required></textarea>
+                    </div>
+                    <button type="submit" className="w-full bg-premium-dark text-white py-3 font-semibold tracking-wider hover:bg-premium-accent transition-colors uppercase">
+                      Submit Review
+                    </button>
+                  </form>
+                ) : (
+                  <div className="p-4 bg-gray-50 text-gray-600 rounded">
+                    Please <Link to="/login" className="text-premium-accent hover:underline">sign in</Link> to write a review.
+                  </div>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </motion.div>
   );

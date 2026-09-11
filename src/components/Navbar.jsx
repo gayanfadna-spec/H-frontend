@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX, FiLogOut } from 'react-icons/fi';
+import { FiSearch, FiShoppingCart, FiHeart, FiUser, FiMenu, FiX, FiLogOut } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import useCartStore from '../store/useCartStore';
 import useAuthStore from '../store/useAuthStore';
+import useWishlistStore from '../store/useWishlistStore';
 
 const Navbar = () => {
   const cartItems = useCartStore((state) => state.cartItems);
   const userInfo = useAuthStore((state) => state.userInfo);
+  const wishlistItems = useWishlistStore((state) => state.wishlistItems);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
 
@@ -53,6 +55,14 @@ const Navbar = () => {
         {/* Icons */}
         <div className="hidden md:flex space-x-6 items-center">
           <button className="hover:text-premium-accent transition-colors"><FiSearch size={22} /></button>
+          <Link to="/wishlist" className="hover:text-premium-accent transition-colors relative">
+            <FiHeart size={22} />
+            {wishlistItems.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-premium-accent text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                {wishlistItems.length}
+              </span>
+            )}
+          </Link>
           <Link to="/cart" className="hover:text-premium-accent transition-colors relative">
             <FiShoppingCart size={22} />
             {cartItems.length > 0 && (

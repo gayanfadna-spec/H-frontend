@@ -82,7 +82,7 @@ const OrderList = () => {
                       <td className="p-4 text-sm text-gray-500">{order._id.substring(0, 8)}...</td>
                       <td className="p-4 font-medium text-premium-dark">{order.user && order.user.name}</td>
                       <td className="p-4 text-gray-600">{order.createdAt.substring(0, 10)}</td>
-                      <td className="p-4 text-gray-600">${order.totalPrice.toFixed(2)}</td>
+                      <td className="p-4 text-gray-600">LKR {order.totalPrice.toFixed(2)}</td>
                       <td className="p-4">
                         {order.isPaid ? (
                           <span className="text-green-500 flex items-center gap-1"><FiCheck /> {order.paidAt.substring(0, 10)}</span>

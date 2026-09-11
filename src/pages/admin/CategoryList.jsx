@@ -2,18 +2,45 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 import useCategoryStore from '../../store/useCategoryStore';
 
 const CategoryList = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
+  const [uploading, setUploading] = useState(false);
   
   const { categories, loading, fetchCategories, createCategory, deleteCategory } = useCategoryStore();
 
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+    setUploading(true);
+
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post('/api/upload', formData, config);
+      setImage(data);
+      toast.success('Image uploaded successfully');
+      setUploading(false);
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+      setUploading(false);
+    }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -90,9 +117,16 @@ const CategoryList = () => {
                     type="text" 
                     value={image}
                     onChange={(e) => setImage(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-premium-accent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-premium-accent mb-2"
                     placeholder="Optional image URL"
                   />
+                  <input
+                    type="file"
+                    id="image-file"
+                    onChange={uploadFileHandler}
+                    className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-premium-light file:text-premium-dark hover:file:bg-gray-200 cursor-pointer"
+                  />
+                  {uploading && <p className="text-sm text-gray-500 mt-2">Uploading...</p>}
                 </div>
 
                 <button 

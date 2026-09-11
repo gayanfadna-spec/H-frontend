@@ -67,31 +67,27 @@ const Cart = () => {
                       </div>
                       
                       <div className="hidden md:block text-center font-medium text-gray-600">
-                        ${item.price.toFixed(2)}
+                        LKR {item.price.toFixed(2)}
                       </div>
                       
-                      <div className="flex justify-start md:justify-center items-center gap-3">
-                        <div className="flex border border-gray-300 rounded overflow-hidden">
-                          <button 
-                            className="px-3 py-1 bg-gray-50 hover:bg-gray-100 text-gray-600 transition-colors"
-                            onClick={() => addToCart(item, item.qty - 1)}
-                            disabled={item.qty <= 1}
-                          >
-                            <FiMinus size={14} />
-                          </button>
-                          <span className="px-4 py-1 font-medium text-sm w-12 text-center">{item.qty}</span>
-                          <button 
-                            className="px-3 py-1 bg-gray-50 hover:bg-gray-100 text-gray-600 transition-colors"
-                            onClick={() => addToCart(item, item.qty + 1)}
-                            disabled={item.qty >= item.countInStock}
-                          >
-                            <FiPlus size={14} />
-                          </button>
-                        </div>
+                      <div className="flex items-center border border-gray-300 rounded overflow-hidden mt-4 lg:mt-0">
+                        <button 
+                          className="px-3 py-1 bg-gray-50 hover:bg-gray-100 transition-colors"
+                          onClick={() => addToCart(item, item.qty - 1)}
+                        >
+                          <FiMinus size={14} />
+                        </button>
+                        <span className="px-4 text-sm font-medium border-x border-gray-300">{item.qty}</span>
+                        <button 
+                          className="px-3 py-1 bg-gray-50 hover:bg-gray-100 transition-colors"
+                          onClick={() => addToCart(item, item.qty + 1)}
+                        >
+                          <FiPlus size={14} />
+                        </button>
                       </div>
-                      
-                      <div className="text-right font-bold text-premium-dark">
-                        ${(item.price * item.qty).toFixed(2)}
+
+                      <div className="font-bold text-premium-dark w-24 text-right hidden md:block">
+                        LKR {(item.price * item.qty).toFixed(2)}
                       </div>
                     </div>
                   ))}
@@ -100,28 +96,28 @@ const Cart = () => {
             </div>
 
             {/* Order Summary */}
-            <div className="lg:w-1/3">
-              <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
-                <h2 className="text-xl font-bold mb-6 pb-4 border-b border-gray-100 uppercase tracking-widest text-premium-dark">Order Summary</h2>
+            <div className="lg:w-1/3 mt-8 lg:mt-0">
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                <h3 className="text-lg font-bold uppercase tracking-wider text-premium-dark border-b pb-4 mb-6">Order Summary</h3>
                 
-                <div className="space-y-4 mb-6 text-gray-600">
-                  <div className="flex justify-between">
+                <div className="space-y-4 text-sm mb-6">
+                  <div className="flex justify-between text-gray-600">
                     <span>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)} items)</span>
-                    <span>${totals.itemsPrice}</span>
+                    <span>LKR {totals.itemsPrice}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-gray-600">
                     <span>Shipping</span>
-                    <span>{Number(totals.shippingPrice) === 0 ? 'Free' : `$${totals.shippingPrice}`}</span>
+                    <span>{Number(totals.shippingPrice) === 0 ? 'Free' : `LKR ${totals.shippingPrice}`}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-gray-600">
                     <span>Tax</span>
-                    <span>${totals.taxPrice}</span>
+                    <span>LKR {totals.taxPrice}</span>
                   </div>
                 </div>
                 
-                <div className="flex justify-between items-center py-4 border-t border-gray-100 mb-8">
-                  <span className="text-lg font-bold text-premium-dark uppercase tracking-wider">Total</span>
-                  <span className="text-2xl font-bold text-premium-dark">${totals.totalPrice}</span>
+                <div className="flex justify-between items-center border-t border-gray-200 pt-6 mb-8">
+                  <span className="text-base font-bold uppercase tracking-wider text-premium-dark">Total</span>
+                  <span className="text-2xl font-bold text-premium-dark">LKR {totals.totalPrice}</span>
                 </div>
                 
                 <button 

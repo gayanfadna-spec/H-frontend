@@ -21,6 +21,8 @@ const ProductEdit = () => {
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const [uploading, setUploading] = useState(false);
+
   const { categories, fetchCategories } = useCategoryStore();
 
   useEffect(() => {
@@ -44,6 +46,30 @@ const ProductEdit = () => {
     fetchCategories();
   }, [id, fetchCategories]);
 
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post('/api/upload', formData, config);
+      setImages((prev) => (prev ? `${prev}, ${data}` : data));
+      toast.success('Image uploaded successfully');
+      setUploading(false);
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+      setUploading(false);
+    }
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -57,7 +83,7 @@ const ProductEdit = () => {
       const updatedProduct = {
         name,
         price,
-        images: images.split(',').map(img => img.trim()),
+        images: images.split(',').map(img => img.trim()).filter(img => img !== ''),
         brand,
         category: category || null, // Allow null if not selected
         countInStock,
@@ -105,7 +131,7 @@ const ProductEdit = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Price ($)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Price (LKR)</label>
                   <input 
                     type="number" 
                     value={price}
@@ -132,9 +158,16 @@ const ProductEdit = () => {
                   type="text" 
                   value={images}
                   onChange={(e) => setImages(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-premium-accent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-premium-accent mb-2"
                   required
                 />
+                <input
+                  type="file"
+                  id="image-file"
+                  onChange={uploadFileHandler}
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-premium-light file:text-premium-dark hover:file:bg-gray-200 cursor-pointer"
+                />
+                {uploading && <p className="text-sm text-gray-500 mt-2">Uploading...</p>}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
