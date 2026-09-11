@@ -4,6 +4,7 @@ import axios from 'axios';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const Order = () => {
   const { id } = useParams();
@@ -127,7 +128,7 @@ const Order = () => {
                 <div className="space-y-4">
                   {order.orderItems.map((item, index) => (
                     <div key={index} className="flex gap-4 border-b pb-4">
-                      <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
+                      <img src={getImageUrl(item.image)} alt={item.name} className="w-16 h-16 object-cover rounded" />
                       <div className="flex-1">
                         <Link to={`/product/${item.product}`} className="font-semibold text-premium-dark hover:underline">{item.name}</Link>
                       </div>

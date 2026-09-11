@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import useCartStore from '../store/useCartStore';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const Checkout = () => {
   const { cartItems, getCartTotals, clearCartItems } = useCartStore();
@@ -167,7 +168,7 @@ const Checkout = () => {
             <div className="space-y-4 mb-6">
               {cartItems.map((item, index) => (
                 <div key={index} className="flex gap-4">
-                  <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
+                  <img src={getImageUrl(item.image)} alt={item.name} className="w-16 h-16 object-cover rounded" />
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-premium-dark">{item.name}</p>
                     <p className="text-sm text-gray-500">{item.qty} x LKR {item.price.toFixed(2)}</p>

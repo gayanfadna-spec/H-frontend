@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiTrash2, FiMinus, FiPlus } from 'react-icons/fi';
+import { FiTrash2, FiMinus, FiPlus, FiArrowLeft } from 'react-icons/fi';
 import useCartStore from '../store/useCartStore';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const Cart = () => {
-  const { cartItems, addToCart, removeFromCart, getCartTotals } = useCartStore();
+  const { cartItems, addToCart, removeFromCart, totals } = useCartStore();
   const navigate = useNavigate();
-  const totals = getCartTotals();
 
   const checkoutHandler = () => {
-    navigate('/checkout');
+    navigate('/login?redirect=/checkout');
   };
 
   return (
@@ -18,40 +18,45 @@ const Cart = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="pt-32 pb-24 bg-premium-light min-h-screen"
+      className="pt-24 pb-24 bg-premium-light min-h-screen"
     >
       <div className="container mx-auto px-6 max-w-6xl">
-        <h1 className="text-3xl md:text-4xl font-bold mb-10 uppercase tracking-widest text-premium-dark">
-          Your <span className="text-premium-accent italic">Cart</span>
+        <Link to="/shop" className="inline-flex items-center text-gray-500 hover:text-premium-accent transition-colors mb-8 uppercase tracking-widest text-sm font-semibold">
+          <FiArrowLeft className="mr-2" /> Continue Shopping
+        </Link>
+
+        <h1 className="text-4xl font-bold mb-10 uppercase tracking-widest text-premium-dark border-b pb-4">
+          Shopping Cart
         </h1>
 
         {cartItems.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-lg shadow-sm border border-gray-100">
-            <h2 className="text-2xl font-medium text-gray-500 mb-6">Your cart is currently empty.</h2>
-            <Link to="/shop" className="bg-premium-accent text-white px-8 py-3 font-semibold tracking-wider hover:bg-premium-dark transition-colors uppercase inline-block">
-              Return to Shop
+          <div className="bg-white p-12 text-center rounded-lg shadow-sm">
+            <h2 className="text-2xl font-bold text-premium-dark mb-4">Your cart is empty</h2>
+            <p className="text-gray-500 mb-8">Looks like you haven't added any premium products yet.</p>
+            <Link to="/shop" className="bg-premium-dark text-white px-8 py-3 font-semibold tracking-wider hover:bg-premium-accent transition-colors uppercase">
+              Start Shopping
             </Link>
           </div>
         ) : (
-          <div className="flex flex-col lg:flex-row gap-10">
+          <div className="flex flex-col lg:flex-row gap-12">
             {/* Cart Items List */}
             <div className="lg:w-2/3">
-              <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+              <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
                 {/* Header */}
-                <div className="hidden md:grid grid-cols-6 gap-4 p-6 border-b border-gray-100 text-sm font-semibold text-gray-500 uppercase tracking-wider bg-gray-50">
-                  <div className="col-span-3">Product</div>
-                  <div className="text-center">Price</div>
-                  <div className="text-center">Quantity</div>
-                  <div className="text-right">Total</div>
+                <div className="hidden md:grid grid-cols-12 gap-4 p-4 border-b border-gray-100 font-semibold text-gray-500 uppercase tracking-wider text-xs">
+                  <div className="col-span-6">Product</div>
+                  <div className="col-span-2 text-center">Price</div>
+                  <div className="col-span-2 text-center">Quantity</div>
+                  <div className="col-span-2 text-right">Total</div>
                 </div>
                 
                 {/* Items */}
                 <div className="divide-y divide-gray-100">
                   {cartItems.map((item) => (
-                    <div key={item.product} className="grid grid-cols-1 md:grid-cols-6 gap-4 p-6 items-center">
-                      <div className="col-span-3 flex items-center gap-4">
+                    <div key={item.product} className="flex flex-col md:grid md:grid-cols-12 gap-4 p-6 items-center hover:bg-gray-50 transition-colors">
+                      <div className="col-span-6 flex items-center gap-6 w-full">
                         <Link to={`/product/${item.product}`}>
-                          <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded" />
+                          <img src={getImageUrl(item.image)} alt={item.name} className="w-20 h-20 object-cover rounded" />
                         </Link>
                         <div>
                           <Link to={`/product/${item.product}`} className="font-semibold text-premium-dark hover:text-premium-accent transition-colors block mb-1">

@@ -90,22 +90,24 @@ const ProductDetails = () => {
               onMouseLeave={handleMouseLeave}
             >
               <img 
-                src={activeImage} 
+                src={getImageUrl(activeImage)} 
                 alt={product.name} 
-                className="w-full h-auto object-cover transition-transform duration-200 ease-out" 
+                className="w-full h-full object-cover origin-center transition-transform duration-200" 
                 style={zoomStyle}
               />
             </div>
+            
+            {/* Thumbnails */}
             {product.images && product.images.length > 1 && (
-              <div className="flex gap-4 overflow-x-auto pb-2">
+              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                 {product.images.map((img, idx) => (
-                  <div 
+                  <button 
                     key={idx} 
                     onClick={() => setActiveImage(img)}
-                    className={`w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden cursor-pointer border-2 transition-colors ${activeImage === img ? 'border-premium-accent' : 'border-transparent'}`}
+                    className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all ${activeImage === img ? 'border-premium-accent' : 'border-transparent opacity-70 hover:opacity-100'}`}
                   >
-                    <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
-                  </div>
+                    <img src={getImageUrl(img)} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+                  </button>
                 ))}
               </div>
             )}

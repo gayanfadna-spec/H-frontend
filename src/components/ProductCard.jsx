@@ -4,6 +4,7 @@ import { FiHeart, FiShoppingCart, FiEye } from 'react-icons/fi';
 import useCartStore from '../store/useCartStore';
 import useWishlistStore from '../store/useWishlistStore';
 import toast from 'react-hot-toast';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const ProductCard = ({ product }) => {
   const addToCart = useCartStore((state) => state.addToCart);
@@ -48,7 +49,7 @@ const ProductCard = ({ product }) => {
       <div className="relative h-80 overflow-hidden bg-gray-100">
         <Link to={`/product/${product._id}`}>
           <img 
-            src={product.images[0]} 
+            src={getImageUrl(product.images[0])} 
             alt={product.name} 
             className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
           />
