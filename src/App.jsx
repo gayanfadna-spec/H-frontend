@@ -17,6 +17,8 @@ import ProductEdit from './pages/admin/ProductEdit';
 import OrderList from './pages/admin/OrderList';
 import CategoryList from './pages/admin/CategoryList';
 import Order from './pages/Order';
+import About from './pages/About';
+import Contact from './pages/Contact';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -28,6 +30,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/categories" element={<Shop />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/product/:id" element={<ProductDetails />} />
@@ -36,6 +39,8 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/order/:id" element={<Order />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminRoute />}>

@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PayPalScriptProvider } from '@paypal/react-paypal-js'
+import { HelmetProvider } from 'react-helmet-async'
 import axios from 'axios'
 import './index.css'
 import App from './App.jsx'
@@ -11,8 +12,10 @@ axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'https://h-backend-8tc0
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <PayPalScriptProvider deferLoading={true}>
-      <App />
-    </PayPalScriptProvider>
+    <HelmetProvider>
+      <PayPalScriptProvider deferLoading={true}>
+        <App />
+      </PayPalScriptProvider>
+    </HelmetProvider>
   </StrictMode>,
 )

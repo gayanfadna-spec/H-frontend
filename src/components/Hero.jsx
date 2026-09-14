@@ -1,116 +1,196 @@
 import { useState, useEffect } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { FiArrowRight, FiShield, FiTruck, FiClock } from 'react-icons/fi';
 
-const backgroundImages = [
-  "https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1491336477066-31156b5e4f35?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+const slides = [
+  {
+    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=2000&q=85",
+    tag: "CURATED FINE JEWELRY • 2026 EDIT",
+    title: "Timeless Adornments.",
+    subtitle: "Understated Elegance.",
+    description: "Explore handcrafted 18k gold-plated jewelry, bespoke rings, and minimalist necklaces designed to elevate your everyday silhouette.",
+    cta: "Explore Jewelry",
+    link: "/shop?category=jewelry"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=2000&q=85",
+    tag: "PRECISION TIMEPIECES • LUXURY ACCENTS",
+    title: "Minimalist Watches.",
+    subtitle: "Effortless Sophistication.",
+    description: "Modern horology meets minimalist design. Built with premium movements, sapphire crystal, and genuine leather straps.",
+    cta: "Discover Watches",
+    link: "/shop?category=watches"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=2000&q=85",
+    tag: "ARTISAN LEATHER • EVERYDAY LUXURY",
+    title: "Handcrafted Bags.",
+    subtitle: "Built For The Journey.",
+    description: "Full-grain leather totes, compact crossbody bags, and slim RFID-blocking wallets crafted for discerning professionals across Sri Lanka.",
+    cta: "Shop Leather Goods",
+    link: "/shop?category=bags"
+  }
 ];
 
 const Hero = () => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  // 3D Tilt Effect Setup
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-500, 500], [15, -15]);
-  const rotateY = useTransform(x, [-500, 500], [-15, 15]);
-
-  const handleMouseMove = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-    
-    // Relative to the center of the hero section
-    x.set(mouseX - width / 2);
-    y.set(mouseY - height / 2);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
-    }, 5000); 
-
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 6500);
     return () => clearInterval(timer);
   }, []);
 
   return (
-    <div 
-      className="relative h-screen w-full flex items-center justify-start overflow-hidden bg-white px-6 md:px-16 lg:px-24"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ perspective: 1200 }}
-    >
-      <div className="absolute inset-0 z-0">
-        {backgroundImages.map((img, index) => (
-          <img 
-            key={img}
-            src={img} 
-            alt={`Accessories ${index + 1}`} 
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-        ))}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/10 to-transparent z-10 pointer-events-none"></div>
-      </div>
-      
-      <motion.div 
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        transition={{ type: "spring", stiffness: 400, damping: 40 }}
-        className="relative z-10 text-left max-w-lg bg-white/40 backdrop-blur-xl p-6 md:p-8 rounded-2xl shadow-2xl border border-white/50"
-      >
-        <motion.h1 
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight mb-4 md:mb-6 leading-tight"
-        >
-          Shop Smart <br/><span className="text-premium-accent italic">Live Easy</span>
-        </motion.h1>
-        
-        <motion.p 
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="text-base md:text-lg text-gray-800 mb-6 font-medium leading-relaxed"
-        >
-          Discover our exclusive collection of premium accessories designed for the modern connoisseur.
-        </motion.p>
+    <section className="relative w-full min-h-[85vh] lg:min-h-[90vh] flex flex-col justify-between overflow-hidden bg-[#F9F7F5]">
 
-        <motion.p 
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="text-base md:text-lg text-gray-900 mb-10 font-bold flex items-center gap-2"
-        >
-          Call Us: <span className="text-premium-accent">0702809286</span>
-        </motion.p>
-        
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.6 }}
-        >
-          <Link 
-            to="/shop" 
-            className="inline-block bg-premium-accent text-white px-8 py-3 font-semibold tracking-wider hover:bg-gray-900 hover:text-white transition-all duration-300 border border-premium-accent hover:border-gray-900 shadow-lg rounded hover:shadow-xl uppercase"
+      {/* Background Slideshow with Crossfade */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={current}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 w-full h-full"
           >
-            Explore Collection
-          </Link>
-        </motion.div>
-      </motion.div>
-    </div>
+            <img
+              src={slides[current].image}
+              alt={slides[current].title}
+              className="w-full h-full object-cover object-center filter brightness-[0.92]"
+            />
+            {/* Elegant editorial gradient overlay for maximum contrast and soft mood */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A]/85 via-[#1A1A1A]/50 to-transparent sm:w-4/5 lg:w-3/5" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/60 via-transparent to-transparent sm:hidden" />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Hero Content Container */}
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12 relative z-10 my-auto py-20 lg:py-28">
+        <div className="max-w-2xl text-left">
+
+          {/* Subtle Tag / Season Badge */}
+          <motion.div
+            key={`tag-${current}`}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#C9A87C] text-[10px] sm:text-xs font-semibold tracking-[0.22em] uppercase mb-6"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C9A87C]" />
+            {slides[current].tag}
+          </motion.div>
+
+          {/* Editorial Headline */}
+          <motion.h1
+            key={`title-${current}`}
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.1] mb-4"
+          >
+            {slides[current].title} <br />
+            <span className="text-[#C9A87C] font-normal italic">
+              {slides[current].subtitle}
+            </span>
+          </motion.h1>
+
+          {/* Subtitle / Description */}
+          <motion.p
+            key={`desc-${current}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="text-stone-200 text-sm sm:text-base md:text-lg max-w-xl font-light leading-relaxed mb-8"
+          >
+            {slides[current].description}
+          </motion.p>
+
+          {/* Action CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
+          >
+            <Link
+              to="/shop"
+              className="inline-flex items-center justify-center gap-3 bg-[#C9A87C] text-[#1A1A1A] hover:bg-white px-8 py-4 rounded-full text-xs font-bold tracking-[0.16em] uppercase transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.02] group"
+            >
+              <span>Shop Collection</span>
+              <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            <Link
+              to={slides[current].link}
+              className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/30 px-7 py-4 rounded-full text-xs font-semibold tracking-[0.16em] uppercase transition-all duration-300"
+            >
+              <span>{slides[current].cta}</span>
+            </Link>
+          </motion.div>
+
+          {/* Slider Pagination Pills */}
+          <div className="flex items-center gap-2.5 mt-12">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrent(index)}
+                className={`h-1.5 transition-all duration-500 rounded-full focus:outline-none ${index === current
+                    ? 'w-10 bg-[#C9A87C]'
+                    : 'w-2.5 bg-white/40 hover:bg-white/70'
+                  }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+
+        </div>
+      </div>
+
+      {/* Floating Trust Strip at the Bottom */}
+      <div className="relative z-10 bg-[#1A1A1A]/90 backdrop-blur-md border-t border-white/10 py-4 px-6">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 text-center md:text-left text-white/90 text-xs">
+
+          <div className="flex items-center justify-center md:justify-start gap-3">
+            <div className="p-2 rounded-lg bg-white/5 text-[#C9A87C]">
+              <FiTruck size={18} />
+            </div>
+            <div>
+              <p className="font-semibold text-stone-100 tracking-wide">Islandwide Delivery</p>
+              <p className="text-stone-400 text-[11px]">Prompt door delivery across all 25 districts</p>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center md:justify-start gap-3">
+            <div className="p-2 rounded-lg bg-white/5 text-[#C9A87C]">
+              <FiShield size={18} />
+            </div>
+            <div>
+              <p className="font-semibold text-stone-100 tracking-wide">Authentic & Verified</p>
+              <p className="text-stone-400 text-[11px]">100% genuine craftsmanship guaranteed</p>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center md:justify-start gap-3">
+            <div className="p-2 rounded-lg bg-white/5 text-[#C9A87C]">
+              <FiClock size={18} />
+            </div>
+            <div>
+              <p className="font-semibold text-stone-100 tracking-wide">Customer Support</p>
+              <p className="text-stone-400 text-[11px]">Call or WhatsApp our team: 070 280 9286</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
   );
 };
 
 export default Hero;
+

@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import useAuthStore from '../store/useAuthStore';
+import SEOComponent from '../components/SEOComponent';
 import toast from 'react-hot-toast';
+import { FiMail, FiLock, FiArrowRight } from 'react-icons/fi';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -28,7 +30,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      toast.success('Successfully logged in!');
+      toast.success('Welcome back to ShopStore.lk!');
     } catch (err) {
       toast.error(error || err.message || 'Invalid email or password');
     }
@@ -39,50 +41,80 @@ const Login = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="pt-32 pb-24 bg-premium-light min-h-screen flex justify-center items-center"
+      transition={{ duration: 0.4 }}
+      className="py-20 bg-[#F9F7F5] min-h-[85vh] flex justify-center items-center px-4"
     >
-      <div className="bg-white p-10 rounded-lg shadow-sm border border-gray-100 w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-8 uppercase tracking-widest text-premium-dark text-center">Login</h1>
+      <SEOComponent 
+        title="Sign In | ShopStore.lk" 
+        description="Sign in to your ShopStore.lk account to view your orders and track deliveries across Sri Lanka." 
+      />
+
+      <div className="bg-white p-8 sm:p-12 rounded-3xl border border-stone-200/80 shadow-sm w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="w-10 h-10 rounded-xl bg-[#1A1A1A] text-[#C9A87C] flex items-center justify-center font-bold text-base mx-auto mb-4">
+            SS
+          </div>
+          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C9A87C] block mb-1">
+            Welcome Back
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1A1A1A] tracking-tight">
+            Sign In to ShopStore
+          </h1>
+          <p className="text-xs text-stone-500 mt-1">Access your saved wishlist & order history</p>
+        </div>
         
-        <form onSubmit={submitHandler} className="space-y-6">
+        <form onSubmit={submitHandler} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">Email Address</label>
-            <input 
-              type="email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-premium-accent"
-              required
-              placeholder="Enter your email"
-            />
+            <label className="block text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5">
+              Email Address
+            </label>
+            <div className="relative">
+              <FiMail className="absolute left-4 top-3.5 text-stone-400" size={16} />
+              <input 
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-11 pr-4 py-3 bg-[#F9F7F5] border border-stone-300 rounded-2xl text-xs text-[#1A1A1A] placeholder-stone-400 focus:outline-none focus:border-[#C9A87C]"
+                required
+                placeholder="you@example.com"
+              />
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">Password</label>
-            <input 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-premium-accent"
-              required
-              placeholder="Enter your password"
-            />
+            <label className="block text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5">
+              Password
+            </label>
+            <div className="relative">
+              <FiLock className="absolute left-4 top-3.5 text-stone-400" size={16} />
+              <input 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-11 pr-4 py-3 bg-[#F9F7F5] border border-stone-300 rounded-2xl text-xs text-[#1A1A1A] placeholder-stone-400 focus:outline-none focus:border-[#C9A87C]"
+                required
+                placeholder="••••••••"
+              />
+            </div>
           </div>
 
           <button 
             type="submit"
             disabled={loading}
-            className="w-full bg-premium-dark text-white py-4 font-semibold tracking-wider hover:bg-premium-accent transition-colors uppercase disabled:bg-gray-400"
+            className="w-full py-4 rounded-2xl bg-[#1A1A1A] hover:bg-[#C9A87C] text-white text-xs font-bold uppercase tracking-[0.18em] transition-all duration-300 shadow-md hover:shadow-xl flex items-center justify-center gap-2 group disabled:opacity-50 mt-6"
           >
-            {loading ? 'Authenticating...' : 'Sign In'}
+            <span>{loading ? 'Verifying...' : 'Sign In'}</span>
+            <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
           </button>
         </form>
 
-        <div className="mt-8 text-center text-sm text-gray-600">
-          New Customer?{' '}
-          <Link to={redirect ? `/register?redirect=${redirect}` : '/register'} className="text-premium-accent font-semibold hover:underline uppercase tracking-wider">
-            Register Here
+        <div className="mt-8 pt-6 border-t border-stone-100 text-center text-xs text-stone-500">
+          New to ShopStore?{' '}
+          <Link 
+            to={redirect ? `/register?redirect=${redirect}` : '/register'} 
+            className="text-[#C9A87C] font-bold hover:underline uppercase tracking-wider"
+          >
+            Create Account
           </Link>
         </div>
       </div>
@@ -91,3 +123,4 @@ const Login = () => {
 };
 
 export default Login;
+
