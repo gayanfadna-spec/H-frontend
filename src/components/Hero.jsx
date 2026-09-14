@@ -67,13 +67,13 @@ const Hero = () => {
       <motion.div 
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         transition={{ type: "spring", stiffness: 400, damping: 40 }}
-        className="relative z-10 text-left max-w-xl bg-white/40 backdrop-blur-xl p-6 md:p-10 lg:p-12 rounded-2xl shadow-2xl border border-white/50"
+        className="relative z-10 text-left max-w-lg bg-white/40 backdrop-blur-xl p-6 md:p-8 rounded-2xl shadow-2xl border border-white/50"
       >
         <motion.h1 
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 tracking-tight mb-4 md:mb-6 leading-tight"
+          className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight mb-4 md:mb-6 leading-tight"
         >
           Shop Smart <br/><span className="text-premium-accent italic">Live Easy</span>
         </motion.h1>
@@ -82,7 +82,7 @@ const Hero = () => {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.4 }}
-          className="text-lg md:text-xl text-gray-800 mb-6 font-medium leading-relaxed"
+          className="text-base md:text-lg text-gray-800 mb-6 font-medium leading-relaxed"
         >
           Discover our exclusive collection of premium accessories designed for the modern connoisseur.
         </motion.p>
@@ -91,7 +91,7 @@ const Hero = () => {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="text-lg md:text-xl text-gray-900 mb-10 font-bold flex items-center gap-2"
+          className="text-base md:text-lg text-gray-900 mb-10 font-bold flex items-center gap-2"
         >
           Call Us: <span className="text-premium-accent">0702809286</span>
         </motion.p>
@@ -103,7 +103,7 @@ const Hero = () => {
         >
           <Link 
             to="/shop" 
-            className="inline-block bg-premium-accent text-white px-10 py-4 font-semibold tracking-wider hover:bg-gray-900 hover:text-white transition-all duration-300 border border-premium-accent hover:border-gray-900 shadow-lg rounded hover:shadow-xl uppercase"
+            className="inline-block bg-premium-accent text-white px-8 py-3 font-semibold tracking-wider hover:bg-gray-900 hover:text-white transition-all duration-300 border border-premium-accent hover:border-gray-900 shadow-lg rounded hover:shadow-xl uppercase"
           >
             Explore Collection
           </Link>
