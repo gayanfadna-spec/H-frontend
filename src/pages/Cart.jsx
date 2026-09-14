@@ -5,7 +5,8 @@ import useCartStore from '../store/useCartStore';
 import { getImageUrl } from '../utils/getImageUrl';
 
 const Cart = () => {
-  const { cartItems, addToCart, removeFromCart, totals } = useCartStore();
+  const { cartItems, addToCart, removeFromCart, getCartTotals } = useCartStore();
+  const totals = getCartTotals();
   const navigate = useNavigate();
 
   const checkoutHandler = () => {

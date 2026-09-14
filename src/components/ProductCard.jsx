@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiHeart, FiShoppingCart, FiEye } from 'react-icons/fi';
 import useCartStore from '../store/useCartStore';
@@ -11,6 +11,28 @@ const ProductCard = ({ product }) => {
   const addToWishlist = useWishlistStore((state) => state.addToWishlist);
   const wishlistItems = useWishlistStore((state) => state.wishlistItems);
   const navigate = useNavigate();
+
+  // 3D Motion Setup
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useTransform(y, [-200, 200], [8, -8]);
+  const rotateY = useTransform(x, [-200, 200], [-8, 8]);
+
+  const handleMouseMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    
+    x.set(mouseX - width / 2);
+    y.set(mouseY - height / 2);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -32,8 +54,11 @@ const ProductCard = ({ product }) => {
 
   return (
     <motion.div 
-      whileHover={{ y: -5 }}
-      className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 relative border border-gray-100"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 1000 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 relative border border-gray-100"
     >
       {/* Badges */}
       <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">

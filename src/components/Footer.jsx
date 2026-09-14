@@ -3,15 +3,15 @@ import { FiInstagram, FiTwitter, FiFacebook } from 'react-icons/fi';
 
 const Footer = () => {
   return (
-    <footer className="bg-premium-dark text-white pt-16 pb-8">
+    <footer className="bg-stone-800 text-stone-100 pt-10 pb-6">
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <h2 className="text-2xl font-bold tracking-widest uppercase mb-4 text-premium-accent">Aura Luxe</h2>
+          <h2 className="text-2xl font-bold tracking-widest uppercase mb-4 text-premium-accent">Shopstore.lk</h2>
           <p className="text-gray-400 text-sm leading-relaxed">
             Discover the finest collection of premium accessories designed to elevate your everyday style. Luxury is in the details.
           </p>
         </div>
-        
+
         <div>
           <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
           <ul className="space-y-2 text-gray-400 text-sm">
@@ -46,8 +46,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="container mx-auto px-6 mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-        &copy; {new Date().getFullYear()} Aura Luxe. All rights reserved.
+      <div className="container mx-auto px-6 mt-8 pt-6 border-t border-stone-700 text-center text-gray-500 text-sm">
+        &copy; {new Date().getFullYear()} Shopstore.lk. All rights reserved.
       </div>
     </footer>
   );

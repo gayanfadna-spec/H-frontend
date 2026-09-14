@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="400" height="100">
+  <!-- Elegant abstract monogram 'S' -->
+  <path d="M 50 20 L 70 20 C 90 20, 100 30, 100 50 C 100 70, 90 80, 70 80 L 50 80 Z" fill="none" stroke="#D4AF37" stroke-width="8" />
+  <path d="M 50 20 C 30 20, 20 30, 20 40 C 20 60, 100 40, 100 60 C 100 70, 90 80, 70 80" fill="none" stroke="#2D3748" stroke-width="8" />
+  
+  <!-- Text Logo -->
+  <text x="120" y="65" font-family="Arial, sans-serif" font-weight="900" font-size="42" fill="#1A202C" letter-spacing="2">SHOP<tspan fill="#D4AF37">STORE.LK</tspan></text>
+</svg>
