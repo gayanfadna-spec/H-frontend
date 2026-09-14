@@ -67,7 +67,7 @@ const Hero = () => {
       <motion.div 
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         transition={{ type: "spring", stiffness: 400, damping: 40 }}
-        className="relative z-10 text-left max-w-2xl bg-white/40 backdrop-blur-xl p-8 md:p-12 lg:p-16 rounded-2xl shadow-2xl border border-white/50"
+        className="relative z-10 text-left max-w-xl bg-white/40 backdrop-blur-xl p-6 md:p-10 lg:p-12 rounded-2xl shadow-2xl border border-white/50"
       >
         <motion.h1 
           initial={{ opacity: 0, x: -30 }}
